@@ -77,6 +77,13 @@
   </distributionManagement>
 
 	<build>
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-ssh</artifactId>
+        <version>2.4</version>
+      </extension>
+    </extensions>
 		<sourceDirectory>source</sourceDirectory>
 		<resources>
 			<resource>
