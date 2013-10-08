@@ -21,6 +21,11 @@
 	</description>
 	<url>http://ical4j.sourceforge.net</url>
 
+	<properties>
+		<bedework.releases.repo.url>scp://dev.bedework.org/data/repository/maven/maven2</bedework.releases.repo.url>
+		<bedework.snapshots.repo.url>scp://dev.bedework.org/data/repository/maven/maven2</bedework.snapshots.repo.url>
+	</properties>
+
 	<issueManagement>
 		<system>SourceForge.net</system>
 		<url>https://sourceforge.net/tracker/?group_id=107024</url>
@@ -33,13 +38,11 @@
 		</license>
 	</licenses>
 
-	<scm>
-		<connection>scm:cvs:pserver:anonymous:@ical4j.cvs.sourceforge.net:/cvsroot/ical4j:iCal4j
-		</connection>
-		<developerConnection>scm:cvs:ext:fortuna@ical4j.cvs.sourceforge.net:/cvsroot/ical4j:iCal4j
-		</developerConnection>
-		<url>http://ical4j.cvs.sourceforge.net/ical4j/iCal4j</url>
-	</scm>
+  <scm>
+    <connection>scm:git:git://github.com/Bedework/bw-ical4j-cl.git</connection>
+    <developerConnection>scm:git:git://github.com/Bedework/bw-ical4j-cl.git</developerConnection>
+    <url>https://github.com/Bedework/bw-ical4j-cl</url>
+  </scm>
 
 	<contributors>
 		<contributor>
@@ -60,13 +63,18 @@
 		</contributor>
 	</contributors>
 
-	<!--
-		<distributionManagement> <relocation>
-		<groupId>net.fortuna.ical4j</groupId> <artifactId>ical4j</artifactId>
-		<version>1.0-beta5</version> <message> Updated group id to conform
-		with maven standards </message> </relocation>
-		</distributionManagement>
-	-->
+  <distributionManagement>
+    <repository>
+      <id>bedework-releases-repository</id>
+      <name>Bedework Releases Repository</name>
+      <url>${bedework.releases.repo.url}</url>
+    </repository>
+    <snapshotRepository>
+      <id>bedework-snapshots-repository</id>
+      <name>Bedework Snapshots Repository</name>
+      <url>${bedework.snapshots.repo.url}</url>
+    </snapshotRepository>
+  </distributionManagement>
 
 	<build>
 		<sourceDirectory>source</sourceDirectory>
