@@ -282,7 +282,34 @@
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
+                <repository>
+                        <id>fuse-releases</id>
+                        <name>Fuse Maven Repository</name>
+                        <url>http://repo.fusesource.com/nexus/content/groups/public/</url>
+                        <releases>
+                                <enabled>true</enabled>
+                        </releases>
+                        <snapshots>
+                                <enabled>false</enabled>
+                        </snapshots>
+                </repository>
+
 	</repositories>
+
+	<pluginRepositories>
+                <pluginRepository>
+                        <id>fuse-releases</id>
+                        <name>Fuse Maven Repository</name>
+                        <url>http://repo.fusesource.com/nexus/content/groups/public/</url>
+                        <releases>
+                                <enabled>true</enabled>
+                        </releases>
+                        <snapshots>
+                                <enabled>false</enabled>
+                        </snapshots>
+                </pluginRepository>
+
+	</pluginRepositories>
 
 	<reporting>
 		<plugins>
