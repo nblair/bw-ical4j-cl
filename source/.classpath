@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path=""/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/home/douglm/drop2/calendar/ical4j/ical4j-head/lib/commons-codec.jar"/>
+	<classpathentry kind="lib" path="/home/douglm/drop2/calendar/ical4j/ical4j-head/lib/commons-lang.jar"/>
+	<classpathentry kind="lib" path="/home/douglm/drop2/calendar/ical4j/ical4j-head/lib/commons-logging.jar"/>
+	<classpathentry kind="output" path="eclipse-build"/>
+</classpath>

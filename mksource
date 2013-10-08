@@ -1,0 +1,7 @@
+#! /bin/bash
+
+jar cf ical4j-$1.jar src
+jar uf ical4j-$1.jar source/
+jar uf ical4j-$1.jar build*
+jar uf ical4j-$1.jar docs
+
