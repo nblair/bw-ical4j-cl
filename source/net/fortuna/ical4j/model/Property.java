@@ -31,25 +31,24 @@
  */
 package net.fortuna.ical4j.model;
 
+import net.fortuna.ical4j.util.Strings;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.ParseException;
 
-import net.fortuna.ical4j.util.Strings;
-
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-
 /**
  * Defines an iCalendar property. Subclasses of this class provide additional validation and typed values for specific
  * iCalendar properties.
- * 
+ *
  * Note that subclasses must provide a reference to the factory used to create the
  * property to support property cloning (copy). If no factory is specified an
  * {@link UnsupportedOperationException} will be thrown by the {@link #copy()} method.
- * 
+ *
  * @author Ben Fortuna
- * 
+ *
  * $Id: Property.java,v 1.38 2010/03/06 12:57:24 fortuna Exp $ [Apr 5, 2004]
  */
 public abstract class Property extends Content {
@@ -196,6 +195,11 @@ public abstract class Property extends Content {
     public static final String TZID = "TZID";
 
     /**
+     * Equivalent timezone identifier property name.
+     */
+    public static final String EQUIVALENT_TZID = "EQUIVALENT-TZID";
+
+    /**
      * Timezone name property name.
      */
     public static final String TZNAME = "TZNAME";
@@ -289,22 +293,22 @@ public abstract class Property extends Content {
      * Poll item id property name.
      */
     public static final String POLL_ITEM_ID = "POLL-ITEM-ID";
-    
+
     /**
      * Poll mode property name.
      */
     public static final String POLL_MODE = "POLL-MODE";
-    
+
     /**
      * Poll properties list property name.
      */
     public static final String POLL_PROPERTIES = "POLL-PROPERTIES";
-    
+
     /**
      * Poll winner property name.
      */
     public static final String POLL_WINNER = "POLL-WINNER";
-    
+
     /**
      * Relationship property name.
      */
@@ -324,7 +328,7 @@ public abstract class Property extends Content {
      * Recurrence rule property name.
      */
     public static final String RRULE = "RRULE";
-    
+
     /**
      * Voter property name.
      */
@@ -390,7 +394,7 @@ public abstract class Property extends Content {
     private ParameterList parameters;
 
     private final PropertyFactory factory;
-    
+
     /**
      * Constructor.
      * @param aName property name
@@ -419,7 +423,7 @@ public abstract class Property extends Content {
         this.parameters = aList;
         this.factory = factory;
     }
-    
+
     /**
      * Creates a deep copy of the specified property. That is, the name, parameter list, and value are duplicated from
      * the specified property. This constructor should only be called from sub-classes to ensure type integrity is

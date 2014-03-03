@@ -31,10 +31,6 @@
  */
 package net.fortuna.ical4j.model;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.text.ParseException;
-
 import net.fortuna.ical4j.model.property.AcceptResponse;
 import net.fortuna.ical4j.model.property.Action;
 import net.fortuna.ical4j.model.property.Attach;
@@ -54,6 +50,7 @@ import net.fortuna.ical4j.model.property.DtStamp;
 import net.fortuna.ical4j.model.property.DtStart;
 import net.fortuna.ical4j.model.property.Due;
 import net.fortuna.ical4j.model.property.Duration;
+import net.fortuna.ical4j.model.property.EquivalentTzId;
 import net.fortuna.ical4j.model.property.ExDate;
 import net.fortuna.ical4j.model.property.ExRule;
 import net.fortuna.ical4j.model.property.ExtendedAddress;
@@ -101,18 +98,22 @@ import net.fortuna.ical4j.model.property.Version;
 import net.fortuna.ical4j.model.property.Voter;
 import net.fortuna.ical4j.model.property.XProperty;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.text.ParseException;
+
 /**
  * A factory for creating iCalendar properties. Note that if relaxed parsing is enabled (via specifying the system
  * property: icalj.parsing.relaxed=true) illegal property names are allowed.
- * 
+ *
  * @author Ben Fortuna
- * 
+ *
  * $Id: PropertyFactoryImpl.java,v 1.21 2010/03/06 12:57:24 fortuna Exp $ [05-Apr-2004]
  */
 public class PropertyFactoryImpl extends AbstractContentFactory implements PropertyFactory {
 
     private static final long serialVersionUID = -7174232004486979641L;
-    
+
     private static PropertyFactoryImpl instance = new PropertyFactoryImpl();
 
     /**
@@ -138,6 +139,7 @@ public class PropertyFactoryImpl extends AbstractContentFactory implements Prope
         registerDefaultFactory(Property.DTSTART, createDtStartFactory());
         registerDefaultFactory(Property.DUE, createDueFactory());
         registerDefaultFactory(Property.DURATION, createDurationFactory());
+        registerDefaultFactory(Property.EQUIVALENT_TZID, createEquivalentTzIdFactory());
         registerDefaultFactory(Property.EXDATE, createExDateFactory());
         registerDefaultFactory(Property.EXRULE, createExRuleFactory());
         registerDefaultFactory(Property.EXTENDED_ADDRESS, createExtendedAddressFactory());
@@ -485,6 +487,21 @@ public class PropertyFactoryImpl extends AbstractContentFactory implements Prope
                 return new Duration();
             }
         };
+    }
+
+    private PropertyFactory createEquivalentTzIdFactory() {
+      return new PropertyFactory() {
+
+        public Property createProperty(final String name,
+                final ParameterList parameters, final String value)
+                throws IOException, URISyntaxException, ParseException {
+          return new EquivalentTzId(parameters, value);
+        }
+
+        public Property createProperty(final String name) {
+          return new EquivalentTzId();
+        }
+      };
     }
 
     private PropertyFactory createExDateFactory() {
