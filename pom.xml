@@ -39,8 +39,8 @@
 	</licenses>
 
   <scm>
-    <connection>scm:git:git://github.com/Bedework/bw-ical4j-cl.git</connection>
-    <developerConnection>scm:git:git://github.com/Bedework/bw-ical4j-cl.git</developerConnection>
+    <connection>scm:git:git@github.com:Bedework/bw-ical4j-cl.git</connection>
+    <developerConnection>scm:git:git@github.com:Bedework/bw-ical4j-cl.git</developerConnection>
     <url>https://github.com/Bedework/bw-ical4j-cl</url>
   </scm>
 
