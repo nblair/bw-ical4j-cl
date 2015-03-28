@@ -31,8 +31,13 @@
  */
 package net.fortuna.ical4j.model
 
+import com.sun.tools.doclets.formats.html.markup.ContentBuilder
+import net.fortuna.ical4j.model.component.VFreeBusy
 import net.fortuna.ical4j.model.property.Version
-import net.fortuna.ical4j.model.component.VFreeBusyimport net.fortuna.ical4j.util.UidGeneratorimport net.fortuna.ical4j.util.SimpleHostInfo/**
+import net.fortuna.ical4j.util.SimpleHostInfo
+import net.fortuna.ical4j.util.UidGenerator
+
+/**
  * $Id: ContentBuilderTest.groovy,v 1.12 2010/03/06 12:57:26 fortuna Exp $
  *
  * Created on: 03/08/2009
@@ -58,108 +63,108 @@ public class ContentBuilderTest extends GroovyTestCase {
             }
         }
         calendar.validate()
-        
+
         assert calendar.properties.size() == 2
         assert calendar.components.size() == 1
-        
+
         println(calendar)
     }
-    
+
     void testBuildParameterList() {
         def parameters = new ContentBuilder().parameters() {
             value('TIME')
             type('test')
             role('CHAIR')
         }
-        
+
         assert parameters.size() == 3
         println(parameters)
     }
-    
+
     void testBuildVFreeBusy() {
         def builder = new ContentBuilder()
-        
+
         def request = new VFreeBusy(builder.vfreebusy() {
             dtstart('20080101', parameters: parameters() {
                 value('DATE')})
             dtend('20100101', parameters: parameters() {
                 value('DATE')})
         }, new ComponentList())
-        
+
         def vfreebusy1 = builder.vfreebusy(request)
-        
+
         assert vfreebusy1 == request
         println(vfreebusy1)
     }
-    
+
     void testBuildDtStamp() {
         def dtStamp = new ContentBuilder().dtstamp('20090803T093000Z')
         assert dtStamp.value == '20090803T093000Z'
         println(dtStamp)
     }
-    
+
     void testBuildProdId() {
         def prodId = new ContentBuilder().prodid('-//Ben Fortuna//iCal4j 1.0//EN')
         assert prodId.value == '-//Ben Fortuna//iCal4j 1.0//EN'
         println(prodId)
     }
-    
+
     void testBuildUid() {
         def uid = new ContentBuilder().uid('1')
         assert uid.value == '1'
         println(uid)
-        
+
         uid = new UidGenerator(new SimpleHostInfo('example.com'), '1').generateUid()
         assert uid == new ContentBuilder().uid(uid)
         println(uid)
     }
-    
+
     void testBuildVersion() {
         def version = new ContentBuilder().version(value: '2.0')
         assert version == Version.VERSION_2_0
-        
+
         version = new ContentBuilder().version('2.0')
         assert version == Version.VERSION_2_0
     }
-    
+
     void testBuildAbbrev() {
         def abbrev = new ContentBuilder().abbrev('abb')
         assert abbrev.value == 'abb'
         println(abbrev)
     }
-    
+
     void testBuildAltRep() {
         def altRep = new ContentBuilder().altrep('http://example.com/alt')
         assert altRep.value == 'http://example.com/alt'
         println(altRep)
     }
-    
+
     void testBuildCn() {
         def cn = new ContentBuilder().cn('Doe, John')
         assert cn.value == 'Doe, John'
         println(cn)
     }
-    
+
     void testBuildXComponent() {
         def xcomponent = new ContentBuilder().xcomponent('test')
         assert xcomponent.name == 'test'
-        
+
         xcomponent = new ContentBuilder().xcomponent(name: 'test')
         assert xcomponent.name == 'test'
     }
-    
+
     void testBuildXProperty() {
         def xproperty = new ContentBuilder().xproperty('test')
         assert xproperty.name == 'test'
-        
+
         xproperty = new ContentBuilder().xproperty(name: 'test')
         assert xproperty.name == 'test'
     }
-    
+
     void testBuildXParameter() {
         def xparameter = new ContentBuilder().xparameter('test')
         assert xparameter.name == 'test'
-        
+
         xparameter = new ContentBuilder().xparameter(name: 'test')
         assert xparameter.name == 'test'
     }
