@@ -84,6 +84,16 @@ public abstract class Component implements Serializable {
     /**
      * Component token.
      */
+    public static final String VVOTER = "VVOTER";
+
+    /**
+     * Component token.
+     */
+    public static final String VOTE = "VOTE";
+
+    /**
+     * Component token.
+     */
     public static final String VTODO = "VTODO";
 
     /**
@@ -261,7 +271,7 @@ public abstract class Component implements Serializable {
         return ComponentFactory.getInstance().createComponent(getName(),
                 newprops);
     }
-    
+
     /**
      * Calculates the recurrence set for this component using the specified period.
      * The recurrence set is derived from a combination of the component start date,
@@ -276,9 +286,9 @@ public abstract class Component implements Serializable {
      * @return a list of periods
      */
     public final PeriodList calculateRecurrenceSet(final Period period) {
-        
+
 //        validate();
-        
+
         final PeriodList recurrenceSet = new PeriodList();
 
         final DtStart start = (DtStart) getProperty(Property.DTSTART);
@@ -287,14 +297,14 @@ public abstract class Component implements Serializable {
             end = (DateProperty) getProperty(Property.DUE);
         }
         Duration duration = (Duration) getProperty(Property.DURATION);
-        
+
         // if no start date specified return empty list..
         if (start == null) {
             return recurrenceSet;
         }
 
         final Value startValue = (Value) start.getParameter(Parameter.VALUE);
-        
+
         // initialise timezone..
 //        if (startValue == null || Value.DATE_TIME.equals(startValue)) {
         if (start.isUtc()) {
@@ -303,7 +313,7 @@ public abstract class Component implements Serializable {
         else if (start.getDate() instanceof DateTime) {
             recurrenceSet.setTimeZone(((DateTime) start.getDate()).getTimeZone());
         }
-        
+
         // if an explicit event duration is not specified, derive a value for recurring
         // periods from the end date..
         Dur rDuration;
@@ -317,7 +327,7 @@ public abstract class Component implements Serializable {
         else {
             rDuration = duration.getDuration();
         }
-        
+
         // add recurrence dates..
         for (final Iterator i = getProperties(Property.RDATE).iterator(); i.hasNext();) {
             final RDate rdate = (RDate) i.next();
@@ -347,13 +357,13 @@ public abstract class Component implements Serializable {
                 }
             }
         }
-        
+
         // allow for recurrence rules that start prior to the specified period
         // but still intersect with it..
         final DateTime startMinusDuration = new DateTime(period.getStart());
         startMinusDuration.setTime(rDuration.negate().getTime(
                 period.getStart()).getTime());
-            
+
         // add recurrence rules..
         for (final Iterator i = getProperties(Property.RRULE).iterator(); i.hasNext();) {
             final RRule rrule = (RRule) i.next();
@@ -364,7 +374,7 @@ public abstract class Component implements Serializable {
                 recurrenceSet.add(new Period(new DateTime(rruleDate), rDuration));
             }
         }
-    
+
         // add initial instance if intersection with the specified period..
         Period startPeriod = null;
         if (end != null) {
@@ -373,7 +383,7 @@ public abstract class Component implements Serializable {
         }
         else {
             /*
-             * PeS: Anniversary type has no DTEND nor DUR, define DUR 
+             * PeS: Anniversary type has no DTEND nor DUR, define DUR
              * locally, otherwise we get NPE
              */
             if (duration == null) {
@@ -386,7 +396,7 @@ public abstract class Component implements Serializable {
         if (period.intersects(startPeriod)) {
             recurrenceSet.add(startPeriod);
         }
-        
+
         // subtract exception dates..
         for (final Iterator i = getProperties(Property.EXDATE).iterator(); i.hasNext();) {
             final ExDate exdate = (ExDate) i.next();
@@ -399,7 +409,7 @@ public abstract class Component implements Serializable {
                 }
             }
         }
-        
+
         // subtract exception rules..
         for (final Iterator i = getProperties(Property.EXRULE).iterator(); i.hasNext();) {
             final ExRule exrule = (ExRule) i.next();

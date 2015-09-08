@@ -310,6 +310,11 @@ public abstract class Property extends Content {
     public static final String POLL_WINNER = "POLL-WINNER";
 
     /**
+     * Recurrence date property name.
+     */
+    public static final String RDATE = "RDATE";
+
+    /**
      * Relationship property name.
      */
     public static final String RELATED_TO = "RELATED-TO";
@@ -320,9 +325,9 @@ public abstract class Property extends Content {
     public static final String RESOURCES = "RESOURCES";
 
     /**
-     * Recurrence date property name.
+     * Response property name.
      */
-    public static final String RDATE = "RDATE";
+    public static final String RESPONSE = "RESPONSE";
 
     /**
      * Recurrence rule property name.

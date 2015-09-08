@@ -44,6 +44,8 @@ import net.fortuna.ical4j.model.component.VPoll;
 import net.fortuna.ical4j.model.component.VTimeZone;
 import net.fortuna.ical4j.model.component.VToDo;
 import net.fortuna.ical4j.model.component.VVenue;
+import net.fortuna.ical4j.model.component.VVoter;
+import net.fortuna.ical4j.model.component.Vote;
 import net.fortuna.ical4j.model.component.XComponent;
 import net.fortuna.ical4j.util.CompatibilityHints;
 
@@ -111,6 +113,12 @@ public final class ComponentFactory {
         else if (Component.VPOLL.equals(name)) {
             component = new VPoll(properties);
         }
+        else if (Component.VVOTER.equals(name)) {
+          component = new VVoter(properties);
+        }
+        else if (Component.VOTE.equals(name)) {
+            component = new Vote(properties);
+        }
         else if (Component.VTIMEZONE.equals(name)) {
             component = new VTimeZone(properties);
         }
@@ -137,8 +145,8 @@ public final class ComponentFactory {
     }
 
     /**
-     * Creates a component which contains sub-components. 
-     * 
+     * Creates a component which contains sub-components.
+     *
      * @param name name of the component
      * @param properties a list of component properties
      * @param components a list of sub-components (namely standard/daylight timezones)
@@ -146,7 +154,7 @@ public final class ComponentFactory {
      */
     public Component createComponent(final String name, final PropertyList properties,
             final ComponentList components) {
-        
+
         if (components != null) {
             Component component = null;
             if (Component.VTIMEZONE.equals(name)) {
@@ -154,6 +162,9 @@ public final class ComponentFactory {
             }
             else if (Component.VEVENT.equals(name)) {
                 component = new VEvent(properties, components);
+            }
+            else if (Component.VVOTER.equals(name)) {
+              component = new VVoter(properties, components);
             }
             else {
                 throw new IllegalArgumentException("Illegal component [" + name

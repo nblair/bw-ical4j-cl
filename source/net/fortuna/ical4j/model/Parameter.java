@@ -41,13 +41,13 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 /**
  * Defines an iCalendar parameter. Subclasses of this class provide additional validation and typed values for specific
  * iCalendar parameters.
- * 
+ *
  * Note that subclasses must provide a reference to the factory used to create the
  * parameter to support parameter cloning (copy). If no factory is specified an
  * {@link UnsupportedOperationException} will be thrown by the {@link #copy()} method.
- * 
+ *
  * @author Ben Fortuna
- * 
+ *
  * $Id: Parameter.java,v 1.27 2011/02/20 03:12:32 fortuna Exp $ [Apr 5, 2004]
  */
 public abstract class Parameter extends Content {
@@ -140,11 +140,6 @@ public abstract class Parameter extends Content {
     public static final String RELTYPE = "RELTYPE";
 
     /**
-     * Voter response.
-     */
-    public static final String RESPONSE = "RESPONSE";
-
-    /**
      * Participation role.
      */
     public static final String ROLE = "ROLE";
@@ -211,7 +206,7 @@ public abstract class Parameter extends Content {
         this.name = aName;
         this.factory = factory;
     }
-    
+
     /**
      * {@inheritDoc}
      */

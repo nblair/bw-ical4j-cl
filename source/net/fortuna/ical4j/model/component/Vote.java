@@ -31,54 +31,22 @@
  */
 package net.fortuna.ical4j.model.component;
 
+import net.fortuna.ical4j.model.*;
+import net.fortuna.ical4j.model.property.*;
+import net.fortuna.ical4j.util.CompatibilityHints;
+import net.fortuna.ical4j.util.PropertyValidator;
+import net.fortuna.ical4j.util.Strings;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-
-import net.fortuna.ical4j.model.Component;
-import net.fortuna.ical4j.model.ComponentList;
-import net.fortuna.ical4j.model.Date;
-import net.fortuna.ical4j.model.Dur;
-import net.fortuna.ical4j.model.Property;
-import net.fortuna.ical4j.model.PropertyList;
-import net.fortuna.ical4j.model.ValidationException;
-import net.fortuna.ical4j.model.Validator;
-import net.fortuna.ical4j.model.property.Clazz;
-import net.fortuna.ical4j.model.property.Completed;
-import net.fortuna.ical4j.model.property.Created;
-import net.fortuna.ical4j.model.property.Description;
-import net.fortuna.ical4j.model.property.DtEnd;
-import net.fortuna.ical4j.model.property.DtStamp;
-import net.fortuna.ical4j.model.property.DtStart;
-import net.fortuna.ical4j.model.property.Due;
-import net.fortuna.ical4j.model.property.Duration;
-import net.fortuna.ical4j.model.property.Geo;
-import net.fortuna.ical4j.model.property.LastModified;
-import net.fortuna.ical4j.model.property.Location;
-import net.fortuna.ical4j.model.property.Method;
-import net.fortuna.ical4j.model.property.Organizer;
-import net.fortuna.ical4j.model.property.PercentComplete;
-import net.fortuna.ical4j.model.property.Priority;
-import net.fortuna.ical4j.model.property.RecurrenceId;
-import net.fortuna.ical4j.model.property.Sequence;
-import net.fortuna.ical4j.model.property.Status;
-import net.fortuna.ical4j.model.property.Summary;
-import net.fortuna.ical4j.model.property.Uid;
-import net.fortuna.ical4j.model.property.Url;
-import net.fortuna.ical4j.util.CompatibilityHints;
-import net.fortuna.ical4j.util.ComponentValidator;
-import net.fortuna.ical4j.util.PropertyValidator;
-import net.fortuna.ical4j.util.Strings;
-
-import org.apache.commons.lang.ObjectUtils;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
  *
- * Defines an iCalendar VPOLL component.
+ * Defines an iCalendar VOTE component for use inside a VPOLL component.
  *
  * <pre>
  * </pre>
@@ -86,7 +54,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author Ben Fortuna
  * @author Mike Douglass
  */
-public class VPoll extends CalendarComponent {
+public class Vote extends CalendarComponent {
 
     private static final long serialVersionUID = -269658210065896668L;
 
@@ -101,17 +69,11 @@ public class VPoll extends CalendarComponent {
         methodValidators.put(Method.REQUEST, new RequestValidator());
     }
 
-    private ComponentList voters = new ComponentList();
-
-    private ComponentList candidates = new ComponentList();
-
-    private ComponentList alarms = new ComponentList();
-
     /**
      * Default constructor.
      */
-    public VPoll() {
-        super(VPOLL);
+    public Vote() {
+        super(VOTE);
         getProperties().add(new DtStamp());
     }
 
@@ -119,71 +81,8 @@ public class VPoll extends CalendarComponent {
      * Constructor.
      * @param properties a list of properties
      */
-    public VPoll(final PropertyList properties) {
-        super(VPOLL, properties);
-    }
-
-    /**
-     * Constructs a new VPOLL instance starting at the specified time with the
-     * specified summary.
-     * @param start the start date of the new poll
-     * @param summary the poll summary
-     */
-    public VPoll(final Date start, final String summary) {
-        this();
-        getProperties().add(new DtStart(start));
-        getProperties().add(new Summary(summary));
-    }
-
-    /**
-     * Constructs a new VPOLL instance starting and ending at the specified times with the specified summary.
-     * @param start the start date of the new poll
-     * @param end the end date of the new poll
-     * @param summary the summary
-     */
-    public VPoll(final Date start, final Date end, final String summary) {
-        this();
-        getProperties().add(new DtStart(start));
-        getProperties().add(new DtEnd(end));
-        getProperties().add(new Summary(summary));
-    }
-
-    /**
-     * Constructs a new VPOLL instance starting at the specified times, for the specified duration, with the specified
-     * summary.
-     * @param start the start date of the new poll
-     * @param duration the duration of the new poll
-     * @param summary the poll summary
-     */
-    public VPoll(final Date start, final Dur duration, final String summary) {
-        this();
-        getProperties().add(new DtStart(start));
-        getProperties().add(new Duration(duration));
-        getProperties().add(new Summary(summary));
-    }
-
-    /**
-     * Returns the list of voters for this poll.
-     * @return a component list
-     */
-    public final ComponentList getVoters() {
-        return voters;
-    }
-
-    /**
-     * Returns the list of candidates for this poll.
-     * @return a component list
-     */
-    public final ComponentList getCandidates() {
-        return candidates;
-    }
-
-    /**
-     * Returns the list of alarms for this poll.
-     * @return a component list
-     */
-    public final ComponentList getAlarms() {
-        return alarms;
+    public Vote(final PropertyList properties) {
+        super(VOTE, properties);
     }
 
     /**
@@ -196,9 +95,6 @@ public class VPoll extends CalendarComponent {
         buffer.append(getName());
         buffer.append(Strings.LINE_SEPARATOR);
         buffer.append(getProperties());
-        buffer.append(getAlarms());
-        buffer.append(getVoters());
-        buffer.append(getCandidates());
         buffer.append(END);
         buffer.append(':');
         buffer.append(getName());
@@ -212,35 +108,10 @@ public class VPoll extends CalendarComponent {
     public final void validate(final boolean recurse)
             throws ValidationException {
 
-        // validate that getAlarms() only contains VAlarm components
-        final Iterator iterator = getAlarms().iterator();
-        while (iterator.hasNext()) {
-            final Component component = (Component) iterator.next();
-            if (component instanceof VAlarm) {
-                ((VAlarm)component).validate(recurse);
-                continue;
-            }
-            if (component instanceof VVoter) {
-                ((VVoter)component).validate(recurse);
-                continue;
-            }
-                throw new ValidationException("Component ["
-                        + component.getName() + "] may not occur in VPOLL");
-            }
-
         if (!CompatibilityHints
                 .isHintEnabled(CompatibilityHints.KEY_RELAXED_VALIDATION)) {
 
-            // From "4.8.4.7 Unique Identifier":
-            // Conformance: The property MUST be specified in the "VEVENT", "VTODO",
-            // "VJOURNAL" or "VFREEBUSY" calendar components.
-            PropertyValidator.getInstance().assertOne(Property.UID,
-                    getProperties());
-
-            // From "4.8.7.2 Date/Time Stamp":
-            // Conformance: This property MUST be included in the "VEVENT", "VTODO",
-            // "VJOURNAL" or "VFREEBUSY" calendar components.
-            PropertyValidator.getInstance().assertOne(Property.DTSTAMP,
+            PropertyValidator.getInstance().assertOne(Property.POLL_ITEM_ID,
                     getProperties());
         }
 
@@ -387,7 +258,6 @@ public class VPoll extends CalendarComponent {
 
         public void validate() throws ValidationException {
             PropertyValidator.getInstance().assertOne(Property.DTSTAMP, getProperties());
-            PropertyValidator.getInstance().assertOne(Property.ORGANIZER, getProperties());
             PropertyValidator.getInstance().assertOne(Property.SUMMARY, getProperties());
             PropertyValidator.getInstance().assertOne(Property.UID, getProperties());
 
@@ -402,24 +272,15 @@ public class VPoll extends CalendarComponent {
             PropertyValidator.getInstance().assertOneOrLess(Property.SEQUENCE, getProperties());
             PropertyValidator.getInstance().assertOneOrLess(Property.STATUS, getProperties());
             PropertyValidator.getInstance().assertOneOrLess(Property.URL, getProperties());
+            PropertyValidator.getInstance().assertOneOrLess(Property.VOTER, getProperties());
 
             PropertyValidator.getInstance().assertNone(Property.ACCEPT_RESPONSE, getProperties());
             PropertyValidator.getInstance().assertNone(Property.ATTACH, getProperties());
             PropertyValidator.getInstance().assertNone(Property.CATEGORIES, getProperties());
             PropertyValidator.getInstance().assertNone(Property.CLASS, getProperties());
+            PropertyValidator.getInstance().assertNone(Property.ORGANIZER, getProperties());
             PropertyValidator.getInstance().assertNone(Property.RECURRENCE_ID, getProperties());
             PropertyValidator.getInstance().assertNone(Property.REQUEST_STATUS, getProperties());
-            PropertyValidator.getInstance().assertNone(Property.VOTER, getProperties());
-
-            for (final Iterator i = getVoters().iterator(); i.hasNext();) {
-                final VVoter voter = (VVoter) i.next();
-                voter.validate(Method.CONFIRM);
-            }
-
-            for (final Iterator i = getAlarms().iterator(); i.hasNext();) {
-                final VAlarm alarm = (VAlarm) i.next();
-                alarm.validate(Method.CONFIRM);
-            }
         }
     }
 
@@ -510,8 +371,6 @@ public class VPoll extends CalendarComponent {
             PropertyValidator.getInstance().assertOneOrLess(Property.URL, getProperties());
 
             PropertyValidator.getInstance().assertNone(Property.REQUEST_STATUS, getProperties());
-
-            ComponentValidator.assertNone(Component.VALARM, getAlarms());
         }
     }
 
@@ -616,11 +475,6 @@ public class VPoll extends CalendarComponent {
 
             PropertyValidator.getInstance().assertNone(Property.ATTENDEE, getProperties());
             PropertyValidator.getInstance().assertNone(Property.REQUEST_STATUS, getProperties());
-
-            for (final Iterator i = getAlarms().iterator(); i.hasNext();) {
-                final VAlarm alarm = (VAlarm) i.next();
-                alarm.validate(Method.PUBLISH);
-            }
         }
     }
 
@@ -712,8 +566,6 @@ public class VPoll extends CalendarComponent {
             PropertyValidator.getInstance().assertNone(Property.SEQUENCE, getProperties());
             PropertyValidator.getInstance().assertNone(Property.STATUS, getProperties());
             PropertyValidator.getInstance().assertNone(Property.URL, getProperties());
-
-            ComponentValidator.assertNone(Component.VALARM, getAlarms());
         }
     }
 
@@ -801,8 +653,6 @@ public class VPoll extends CalendarComponent {
             PropertyValidator.getInstance().assertOneOrLess(Property.STATUS, getProperties());
             PropertyValidator.getInstance().assertOneOrLess(Property.SUMMARY, getProperties());
             PropertyValidator.getInstance().assertOneOrLess(Property.URL, getProperties());
-
-            ComponentValidator.assertNone(Component.VALARM, getAlarms());
         }
     }
 
@@ -897,11 +747,6 @@ public class VPoll extends CalendarComponent {
             PropertyValidator.getInstance().assertOneOrLess(Property.URL, getProperties());
 
             PropertyValidator.getInstance().assertNone(Property.REQUEST_STATUS, getProperties());
-
-            for (final Iterator i = getAlarms().iterator(); i.hasNext();) {
-                final VAlarm alarm = (VAlarm) i.next();
-                alarm.validate(Method.REQUEST);
-            }
         }
     }
 
@@ -963,13 +808,6 @@ public class VPoll extends CalendarComponent {
     }
 
     /**
-     * @return the optional organizer property
-     */
-    public final Organizer getOrganizer() {
-        return (Organizer) getProperty(Property.ORGANIZER);
-    }
-
-    /**
      * @return the optional percentage complete property
      */
     public final PercentComplete getPercentComplete() {
@@ -977,10 +815,10 @@ public class VPoll extends CalendarComponent {
     }
 
     /**
-     * @return the optional priority property
+     * @return the optional voter property
      */
-    public final Priority getPriority() {
-        return (Priority) getProperty(Property.PRIORITY);
+    public final Voter getVoter() {
+        return (Voter) getProperty(Property.VOTER);
     }
 
     /**
@@ -1012,10 +850,10 @@ public class VPoll extends CalendarComponent {
     }
 
     /**
-     * @return the optional URL property
+     * @return the required poll-item-id property
      */
-    public final Url getUrl() {
-        return (Url) getProperty(Property.URL);
+    public final PollItemId getPollItemId() {
+        return (PollItemId) getProperty(Property.POLL_ITEM_ID);
     }
 
     /**
@@ -1026,59 +864,23 @@ public class VPoll extends CalendarComponent {
     }
 
     /**
-     * @return the optional Duration property
-     */
-    public final Duration getDuration() {
-        return (Duration) getProperty(Property.DURATION);
-    }
-
-    /**
-     * @return the optional due property
-     */
-    public final Due getDue() {
-        return (Due) getProperty(Property.DUE);
-    }
-
-    /**
-     * Returns the UID property of this component if available.
-     * @return a Uid instance, or null if no UID property exists
-     */
-    public final Uid getUid() {
-        return (Uid) getProperty(Property.UID);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public boolean equals(final Object arg0) {
-        if (arg0 instanceof VPoll) {
-            return super.equals(arg0)
-                    && ObjectUtils.equals(alarms, ((VPoll) arg0).getAlarms());
-        }
-        return super.equals(arg0);
-    }
-
-    /**
      * {@inheritDoc}
      */
     public int hashCode() {
         return new HashCodeBuilder().append(getName()).append(getProperties())
-                .append(getAlarms()).toHashCode();
+                .toHashCode();
     }
 
     /**
      * Overrides default copy method to add support for copying alarm sub-components.
      * @return a copy of the instance
-     * @throws ParseException where an error occurs parsing data
-     * @throws IOException where an error occurs reading data
-     * @throws URISyntaxException where an invalid URI is encountered
+     * @throws java.text.ParseException where an error occurs parsing data
+     * @throws java.io.IOException where an error occurs reading data
+     * @throws java.net.URISyntaxException where an invalid URI is encountered
      * @see net.fortuna.ical4j.model.Component#copy()
      */
     public Component copy() throws ParseException, IOException, URISyntaxException {
-        final VPoll copy = (VPoll) super.copy();
-        copy.voters = new ComponentList(voters);
-        copy.candidates = new ComponentList(candidates);
-        copy.alarms = new ComponentList(alarms);
+        final Vote copy = (Vote) super.copy();
         return copy;
     }
 }

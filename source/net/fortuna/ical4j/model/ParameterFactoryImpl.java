@@ -66,7 +66,7 @@ import net.fortuna.ical4j.util.Strings;
 
 /**
  * A factory for creating iCalendar parameters.
- * 
+ *
  * $Id $
  *
  * [05-Apr-2004]
@@ -76,7 +76,7 @@ import net.fortuna.ical4j.util.Strings;
 public class ParameterFactoryImpl extends AbstractContentFactory implements ParameterFactory {
 
     private static final long serialVersionUID = -4034423507432249165L;
-    
+
     private static ParameterFactoryImpl instance = new ParameterFactoryImpl();
 
     protected ParameterFactoryImpl() {
@@ -97,7 +97,6 @@ public class ParameterFactoryImpl extends AbstractContentFactory implements Para
         registerDefaultFactory(Parameter.RANGE, new RangeFactory());
         registerDefaultFactory(Parameter.RELATED, new RelatedFactory());
         registerDefaultFactory(Parameter.RELTYPE, new RelTypeFactory());
-        registerDefaultFactory(Parameter.RESPONSE, new ResponseFactory());
         registerDefaultFactory(Parameter.ROLE, new RoleFactory());
         registerDefaultFactory(Parameter.RSVP, new RsvpFactory());
         registerDefaultFactory(Parameter.SCHEDULE_AGENT, new ScheduleAgentFactory());
@@ -153,7 +152,7 @@ public class ParameterFactoryImpl extends AbstractContentFactory implements Para
         return name.startsWith(Parameter.EXPERIMENTAL_PREFIX)
                 && name.length() > Parameter.EXPERIMENTAL_PREFIX.length();
     }
-    
+
     private static class AbbrevFactory implements ParameterFactory {
         private static final long serialVersionUID = 1L;
 
@@ -161,7 +160,7 @@ public class ParameterFactoryImpl extends AbstractContentFactory implements Para
             return new Abbrev(value);
         }
     }
-    
+
     private static class AltRepFactory implements ParameterFactory {
         private static final long serialVersionUID = 1L;
 
@@ -169,7 +168,7 @@ public class ParameterFactoryImpl extends AbstractContentFactory implements Para
             return new AltRep(value);
         }
     }
-    
+
     private static class CnFactory implements ParameterFactory {
         private static final long serialVersionUID = 1L;
 
@@ -178,7 +177,7 @@ public class ParameterFactoryImpl extends AbstractContentFactory implements Para
             return new Cn(value);
         }
     }
-    
+
     private static class CuTypeFactory implements ParameterFactory {
         private static final long serialVersionUID = 1L;
 
@@ -202,7 +201,7 @@ public class ParameterFactoryImpl extends AbstractContentFactory implements Para
             return parameter;
         }
     }
-    
+
     private static class DelegatedFromFactory implements ParameterFactory {
         private static final long serialVersionUID = 1L;
 
@@ -211,7 +210,7 @@ public class ParameterFactoryImpl extends AbstractContentFactory implements Para
             return new DelegatedFrom(value);
         }
     }
-    
+
     private static class DelegatedToFactory implements ParameterFactory {
         private static final long serialVersionUID = 1L;
 
@@ -220,7 +219,7 @@ public class ParameterFactoryImpl extends AbstractContentFactory implements Para
             return new DelegatedTo(value);
         }
     }
-    
+
     private static class DirFactory implements ParameterFactory {
         private static final long serialVersionUID = 1L;
 
@@ -229,7 +228,7 @@ public class ParameterFactoryImpl extends AbstractContentFactory implements Para
             return new Dir(value);
         }
     }
-    
+
     private static class EncodingFactory implements ParameterFactory {
         private static final long serialVersionUID = 1L;
 
@@ -245,7 +244,7 @@ public class ParameterFactoryImpl extends AbstractContentFactory implements Para
             return parameter;
         }
     }
-    
+
     private static class FmtTypeFactory implements ParameterFactory {
         private static final long serialVersionUID = 1L;
 
@@ -254,7 +253,7 @@ public class ParameterFactoryImpl extends AbstractContentFactory implements Para
             return new FmtType(value);
         }
     }
-    
+
     private static class FbTypeFactory implements ParameterFactory {
         private static final long serialVersionUID = 1L;
 
@@ -276,7 +275,7 @@ public class ParameterFactoryImpl extends AbstractContentFactory implements Para
             return parameter;
         }
     }
-    
+
     private static class LanguageFactory implements ParameterFactory {
         private static final long serialVersionUID = 1L;
 
@@ -285,7 +284,7 @@ public class ParameterFactoryImpl extends AbstractContentFactory implements Para
             return new Language(value);
         }
     }
-    
+
     private static class MemberFactory implements ParameterFactory {
         private static final long serialVersionUID = 1L;
 
@@ -294,7 +293,7 @@ public class ParameterFactoryImpl extends AbstractContentFactory implements Para
             return new Member(value);
         }
     }
-    
+
     private static class PartStatFactory implements ParameterFactory {
         private static final long serialVersionUID = 1L;
 
@@ -325,7 +324,7 @@ public class ParameterFactoryImpl extends AbstractContentFactory implements Para
             return parameter;
         }
     }
-    
+
     private static class PublicCommentFactory implements ParameterFactory {
         private static final long serialVersionUID = 1L;
 
@@ -333,7 +332,7 @@ public class ParameterFactoryImpl extends AbstractContentFactory implements Para
             return new PublicComment(value);
         }
     }
-    
+
     private static class RangeFactory implements ParameterFactory {
         private static final long serialVersionUID = 1L;
 
@@ -349,7 +348,7 @@ public class ParameterFactoryImpl extends AbstractContentFactory implements Para
             return parameter;
         }
     }
-    
+
     private static class RelatedFactory implements ParameterFactory {
         private static final long serialVersionUID = 1L;
 
@@ -365,7 +364,7 @@ public class ParameterFactoryImpl extends AbstractContentFactory implements Para
             return parameter;
         }
     }
-    
+
     private static class RelTypeFactory implements ParameterFactory {
         private static final long serialVersionUID = 1L;
 
@@ -374,16 +373,7 @@ public class ParameterFactoryImpl extends AbstractContentFactory implements Para
             return new RelType(value);
         }
     }
-    
-    private static class ResponseFactory implements ParameterFactory {
-        private static final long serialVersionUID = 1L;
 
-        public Parameter createParameter(final String name,
-                final String value) throws URISyntaxException {
-          return new Response(value);
-        }
-    }
-    
     private static class RoleFactory implements ParameterFactory {
         private static final long serialVersionUID = 1L;
 
@@ -405,7 +395,7 @@ public class ParameterFactoryImpl extends AbstractContentFactory implements Para
             return parameter;
         }
     }
-    
+
     private static class RsvpFactory implements ParameterFactory {
         private static final long serialVersionUID = 1L;
 
@@ -440,12 +430,12 @@ public class ParameterFactoryImpl extends AbstractContentFactory implements Para
     }
 
     private static class ScheduleStatusFactory implements ParameterFactory {
-        public Parameter createParameter(final String name, 
+        public Parameter createParameter(final String name,
         		final String value) throws URISyntaxException {
             return new ScheduleStatus(value);
         }
     }
-    
+
     private static class SentByFactory implements ParameterFactory {
         private static final long serialVersionUID = 1L;
 
@@ -454,7 +444,7 @@ public class ParameterFactoryImpl extends AbstractContentFactory implements Para
             return new SentBy(value);
         }
     }
-    
+
     private static class StayInformedFactory implements ParameterFactory {
         private static final long serialVersionUID = 1L;
 
@@ -470,7 +460,7 @@ public class ParameterFactoryImpl extends AbstractContentFactory implements Para
             return parameter;
         }
     }
-    
+
     private static class VvenueFactory implements ParameterFactory {
         private static final long serialVersionUID = 1L;
 
@@ -479,7 +469,7 @@ public class ParameterFactoryImpl extends AbstractContentFactory implements Para
             return new Vvenue(value);
         }
     }
-    
+
     private static class TypeFactory implements ParameterFactory {
         private static final long serialVersionUID = 1L;
 
@@ -488,7 +478,7 @@ public class ParameterFactoryImpl extends AbstractContentFactory implements Para
             return new Type(value);
         }
     }
-    
+
     private static class TzIdFactory implements ParameterFactory {
         private static final long serialVersionUID = 1L;
 
@@ -497,7 +487,7 @@ public class ParameterFactoryImpl extends AbstractContentFactory implements Para
             return new TzId(Strings.unescape(value));
         }
     }
-    
+
     private static class ValueFactory implements ParameterFactory {
         private static final long serialVersionUID = 1L;
 
@@ -549,5 +539,5 @@ public class ParameterFactoryImpl extends AbstractContentFactory implements Para
             return parameter;
         }
     }
-    
+
 }

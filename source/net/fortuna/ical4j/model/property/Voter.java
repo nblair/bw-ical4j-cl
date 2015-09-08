@@ -136,8 +136,6 @@ public class Voter extends Property {
                 getParameters());
         ParameterValidator.getInstance().assertOneOrLess(Parameter.LANGUAGE,
                 getParameters());
-        ParameterValidator.getInstance().assertOneOrLess(Parameter.RESPONSE,
-                getParameters());
         ParameterValidator.getInstance().assertOneOrLess(Parameter.STAY_INFORMED,
                 getParameters());
 
