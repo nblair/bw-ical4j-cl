@@ -31,9 +31,6 @@
  */
 package net.fortuna.ical4j.data;
 
-
-import java.io.StringReader;
-import java.net.URISyntaxException;
 import junit.framework.TestCase;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
@@ -45,6 +42,9 @@ import net.fortuna.ical4j.model.TimeZoneRegistryFactory;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.util.Strings;
 
+import java.io.StringReader;
+import java.net.URISyntaxException;
+
 /**
  * $Id: CalendarBuilderCustomRegistryTest.java [Nov 16, 2009]
  *
@@ -54,9 +54,9 @@ import net.fortuna.ical4j.util.Strings;
  */
 public class CalendarBuilderCustomRegistryTest extends TestCase {
 
-    private static final String SCHEDULE_STATUS = "SCHEDULE-STATUS";
+    private static final String NOT_SCHEDULE_STATUS = "NOT_SCHEDULE-STATUS";
 
-    private static final String VEVENT_WITH_SCHEDULE_STATUS =
+    private static final String VEVENT_WITH_NOT_SCHEDULE_STATUS =
             "BEGIN:VCALENDAR\r\n"
              + "PRODID:-//Sample/Calendar//EN\r\n"
              + "VERSION:2.0\r\n"
@@ -64,17 +64,17 @@ public class CalendarBuilderCustomRegistryTest extends TestCase {
              + "UID:12\r\n"
              + "DTSTAMP:20071212T121212Z\r\n"
              + "ORGANIZER:mailto:org@example.com\r\n"
-             + "ATTENDEE;SCHEDULE-STATUS=2.0:mailto:attendee@example.com\r\n"
+             + "ATTENDEE;NOT_SCHEDULE-STATUS=2.0:mailto:attendee@example.com\r\n"
              + "END:VEVENT\r\n"
              + "END:VCALENDAR";
 
 
-    private static class ScheduleStatus extends Parameter {
+    private static class NotScheduleStatus extends Parameter {
 
         private String value;
 
-        public ScheduleStatus(String aValue, ParameterFactory factory) {
-            super(SCHEDULE_STATUS, factory);
+        public NotScheduleStatus(String aValue, ParameterFactory factory) {
+            super(NOT_SCHEDULE_STATUS, factory);
             value = Strings.unquote(aValue);
         }
 
@@ -94,20 +94,20 @@ public class CalendarBuilderCustomRegistryTest extends TestCase {
         // try to build with a regular builder
         CalendarBuilder builder = new CalendarBuilder();
         try {
-            builder.build(new StringReader(VEVENT_WITH_SCHEDULE_STATUS));
+            builder.build(new StringReader(VEVENT_WITH_NOT_SCHEDULE_STATUS));
             fail("expected exception");
         } catch (ParserException ioe) {
         }
 
         // try to build with a custom parameter factory
         ParameterFactoryRegistry paramFactory = new ParameterFactoryRegistry();
-        paramFactory.register(SCHEDULE_STATUS,
+        paramFactory.register(NOT_SCHEDULE_STATUS,
             new ParameterFactory() {
                 static final long serialVersionUID = 8871483730211383100L;
 
                 public Parameter createParameter(final String name,
                             final String value) throws URISyntaxException {
-                        return new ScheduleStatus(value, this);
+                        return new NotScheduleStatus(value, this);
                     }
             });
         builder = new CalendarBuilder(
@@ -116,7 +116,7 @@ public class CalendarBuilderCustomRegistryTest extends TestCase {
                 paramFactory,
                 TimeZoneRegistryFactory.getInstance().createRegistry());
 
-        Calendar cal = builder.build(new StringReader(VEVENT_WITH_SCHEDULE_STATUS));
+        Calendar cal = builder.build(new StringReader(VEVENT_WITH_NOT_SCHEDULE_STATUS));
 
         VEvent event = (VEvent)cal.getComponent(Component.VEVENT);
         VEvent eventBis = (VEvent)event.copy();

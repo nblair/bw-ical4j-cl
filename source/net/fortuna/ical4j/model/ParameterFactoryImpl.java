@@ -31,8 +31,6 @@
  */
 package net.fortuna.ical4j.model;
 
-import java.net.URISyntaxException;
-
 import net.fortuna.ical4j.model.parameter.Abbrev;
 import net.fortuna.ical4j.model.parameter.AltRep;
 import net.fortuna.ical4j.model.parameter.Cn;
@@ -50,7 +48,6 @@ import net.fortuna.ical4j.model.parameter.PublicComment;
 import net.fortuna.ical4j.model.parameter.Range;
 import net.fortuna.ical4j.model.parameter.RelType;
 import net.fortuna.ical4j.model.parameter.Related;
-import net.fortuna.ical4j.model.parameter.Response;
 import net.fortuna.ical4j.model.parameter.Role;
 import net.fortuna.ical4j.model.parameter.Rsvp;
 import net.fortuna.ical4j.model.parameter.ScheduleAgent;
@@ -63,6 +60,8 @@ import net.fortuna.ical4j.model.parameter.Value;
 import net.fortuna.ical4j.model.parameter.Vvenue;
 import net.fortuna.ical4j.model.parameter.XParameter;
 import net.fortuna.ical4j.util.Strings;
+
+import java.net.URISyntaxException;
 
 /**
  * A factory for creating iCalendar parameters.
