@@ -1,28 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <!--
-	<parent>
-		<artifactId>modularity-parent</artifactId>
-		<groupId>net.modularity</groupId>
-		<version>1.0.10-SNAPSHOT</version>
-	</parent>
-   -->
+
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.bedework</groupId>
 	<artifactId>bw-ical4j-cl</artifactId>
-	<packaging>bundle</packaging>
+	<packaging>jar</packaging>
 	<name>Bedework iCal4j</name>
-  <!--
-	<version>1.0-SNAPSHOT</version> -->
+
         <version>1.1.0-SNAPSHOT</version>
 	<description>A fork of iCal4j with customizations for Bedework.</description>
 	<url>https://github.com/Bedework/bw-ical4j-cl</url>
-
-	<properties>
-		<bedework.releases.repo.url>scp://dev.bedework.org/data/repository/maven/maven2</bedework.releases.repo.url>
-		<bedework.snapshots.repo.url>scp://dev.bedework.org/data/repository/maven/maven2</bedework.snapshots.repo.url>
-	</properties>
 
 	<issueManagement>
 		<system>Github</system>
@@ -62,16 +50,14 @@
 	</contributors>
 
   <distributionManagement>
-    <repository>
-      <id>bedework-releases-repository</id>
-      <name>Bedework Releases Repository</name>
-      <url>${bedework.releases.repo.url}</url>
-    </repository>
     <snapshotRepository>
-      <id>bedework-snapshots-repository</id>
-      <name>Bedework Snapshots Repository</name>
-      <url>${bedework.snapshots.repo.url}</url>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
     </snapshotRepository>
+    <repository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
   </distributionManagement>
 
 	<build>
@@ -120,114 +106,38 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.3</version>
 				<configuration>
 					<source>1.7</source>
 					<target>1.7</target>
+					<compilerId>groovy-eclipse-compiler</compilerId>
 					<testExcludes>
 						<exclude>**/RegexTestHarness.java</exclude>
 					</testExcludes>
 				</configuration>
+				<dependencies>
+		          <dependency>
+		            <groupId>org.codehaus.groovy</groupId>
+		            <artifactId>groovy-eclipse-compiler</artifactId>
+		            <version>2.9.1-01</version>
+		          </dependency>
+		          <dependency>
+		            <groupId>org.codehaus.groovy</groupId>
+		            <artifactId>groovy-eclipse-batch</artifactId>
+		            <version>2.3.7-01</version>
+		          </dependency>
+      			</dependencies>
 			</plugin>
 
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.18.1</version>
 				<configuration>
-					<!--
-						<systemProperties> <property>
-						<name>ical4j.unfolding.relaxed</name> <value>true</value>
-						</property> <property> <name>ical4j.parsing.relaxed</name>
-						<value>true</value> </property> </systemProperties>
-						<forkMode>pertest</forkMode>
-					-->
 					<excludes>
 						<exclude>**/CalendarOutputterTest.java</exclude>
 						<exclude>**/Abstract*.java</exclude>
 					</excludes>
 				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<extensions>true</extensions>
-				<configuration>
-					<instructions>
-						<Export-Package>net.fortuna.ical4j.*</Export-Package>
-						<Import-Package>net.fortuna.ical4j.*,org.apache.commons.lang.*,org.apache.commons.logging,*;resolution:=optional</Import-Package>
-					</instructions>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-clover-plugin</artifactId>
-				<configuration>
-					<jdk>1.4</jdk>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>pre-site</phase>
-						<goals>
-							<goal>instrument</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<configuration>
-					<descriptors>
-						<descriptor>etc/bin-assembly.xml</descriptor>
-						<descriptor>etc/src-assembly.xml</descriptor>
-					</descriptors>
-				</configuration>
-				<executions>
-					<execution>
-						<id>make-assembly</id>
-						<phase>site-deploy</phase>
-						<goals>
-							<goal>attached</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
-				<groupId>org.codehaus.gmaven</groupId>
-				<artifactId>gmaven-plugin</artifactId>
-				<version>1.2</version>
-				<configuration>
-					<providerSelection>1.7</providerSelection>
-				</configuration>
-				<dependencies>
-					<dependency>
-						<groupId>org.codehaus.gmaven.runtime</groupId>
-						<artifactId>gmaven-runtime-1.7</artifactId>
-						<version>1.2</version>
-						<exclusions>
-							<exclusion>
-								<groupId>org.codehaus.groovy</groupId>
-								<artifactId>groovy-all</artifactId>
-							</exclusion>
-						</exclusions>
-					</dependency>
-					<dependency>
-						<groupId>org.codehaus.groovy</groupId>
-						<artifactId>groovy-all</artifactId>
-						<version>1.7.1</version>
-					</dependency>
-				</dependencies>
-				<executions>
-					<execution>
-						<goals>
-							<goal>generateStubs</goal>
-							<goal>compile</goal>
-							<goal>generateTestStubs</goal>
-							<goal>testCompile</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>
@@ -261,11 +171,11 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.codehaus.groovy</groupId>
-			<artifactId>groovy-all</artifactId>
-			<version>1.7.1</version>
-			<scope>provided</scope>
-		</dependency>
+    		<groupId>org.codehaus.groovy</groupId>
+    		<artifactId>groovy-all</artifactId>
+    		<version>2.4.5</version>
+    		<scope>provided</scope>
+    	</dependency>
 		<dependency>
 			<groupId>backport-util-concurrent</groupId>
 			<artifactId>backport-util-concurrent</artifactId>
@@ -273,128 +183,4 @@
 		</dependency>
 	</dependencies>
 
-	<repositories>
-		<repository>
-			<id>modularity-releases</id>
-			<name>Modularity Maven Repository</name>
-			<url>http://m2.modularity.net.au/releases</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>modularity-snapshots</id>
-			<name>Modularity Snapshot Repository</name>
-			<url>http://m2.modularity.net.au/snapshots</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-                <repository>
-                        <id>fuse-releases</id>
-                        <name>Fuse Maven Repository</name>
-                        <url>http://repo.fusesource.com/nexus/content/groups/public/</url>
-                        <releases>
-                                <enabled>true</enabled>
-                        </releases>
-                        <snapshots>
-                                <enabled>false</enabled>
-                        </snapshots>
-                </repository>
-
-	</repositories>
-
-	<pluginRepositories>
-                <pluginRepository>
-                        <id>fuse-releases</id>
-                        <name>Fuse Maven Repository</name>
-                        <url>http://repo.fusesource.com/nexus/content/groups/public/</url>
-                        <releases>
-                                <enabled>true</enabled>
-                        </releases>
-                        <snapshots>
-                                <enabled>false</enabled>
-                        </snapshots>
-                </pluginRepository>
-
-	</pluginRepositories>
-
-	<reporting>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-pmd-plugin</artifactId>
-				<configuration>
-					<linkXref>true</linkXref>
-					<targetJdk>1.4</targetJdk>
-					<rulesets>
-						<ruleset>http://svn.mnode.org/tools/pmd/mnode_ruleset.xml
-						</ruleset>
-					</rulesets>
-				</configuration>
-			</plugin>
-
-			<!-- Override default suppressions.. -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-checkstyle-plugin</artifactId>
-				<configuration>
-					<configLocation>http://svn.mnode.org/tools/checkstyle/mnode_checks.xml
-					</configLocation>
-					<suppressionsFile>etc/checkstyle-suppressions.xml
-					</suppressionsFile>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<artifactId>maven-clover-plugin</artifactId>
-				<configuration>
-					<licenseLocation>
-						etc/clover.license
-					</licenseLocation>
-					<excludes>
-						<exclude>**/generated-stubs/**</exclude>
-					</excludes>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>clirr-maven-plugin</artifactId>
-				<configuration>
-					<minSeverity>info</minSeverity>
-					<comparisonVersion>1.0-rc2</comparisonVersion>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-changelog-plugin</artifactId>
-				<reportSets>
-					<reportSet>
-						<id>changelog</id>
-						<configuration>
-							<type>tag</type>
-							<tags>
-								<tag implementation="java.lang.String">
-									ical4j-1_0-rc2
-								</tag>
-								<tag implementation="java.lang.String">
-									ical4j-1_0-rc3
-								</tag>
-							</tags>
-						</configuration>
-						<reports>
-							<report>changelog</report>
-						</reports>
-					</reportSet>
-				</reportSets>
-			</plugin>
-		</plugins>
-	</reporting>
 </project>
