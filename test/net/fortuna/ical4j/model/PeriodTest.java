@@ -31,16 +31,15 @@
  */
 package net.fortuna.ical4j.model;
 
-import java.text.ParseException;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import java.text.ParseException;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 /**
  * $Id: PeriodTest.java,v 1.16 2010/03/06 12:57:24 fortuna Exp $
@@ -52,19 +51,19 @@ import org.apache.commons.logging.LogFactory;
  * @see net.fortuna.ical4j.model.Period
  */
 public class PeriodTest extends TestCase {
-    
+
     private static final Log LOG = LogFactory.getLog(PeriodTest.class);
 
     private Period period;
-    
+
     private DateTime expectedDate;
-    
+
     private Period expectedPeriod;
-    
+
     private TimeZone expectedTimezone;
-    
+
     private boolean expectedIsUtc;
-    
+
     /**
      * @param period
      * @param expectedDate
@@ -74,7 +73,7 @@ public class PeriodTest extends TestCase {
     	this.period = period;
     	this.expectedDate = expectedDate;
     }
-    
+
     /**
      * @param testMethod
      * @param period
@@ -85,7 +84,7 @@ public class PeriodTest extends TestCase {
     	this.period = period;
     	this.expectedPeriod = expectedPeriod;
     }
-    
+
     /**
      * @param testMethod
      * @param period
@@ -107,7 +106,7 @@ public class PeriodTest extends TestCase {
         this.period = period;
         this.expectedIsUtc = expectedIsUtc;
     }
-    
+
     /**
      * @param testMethod
      * @param period
@@ -116,35 +115,35 @@ public class PeriodTest extends TestCase {
     	super(testMethod);
     	this.period = period;
     }
-    
+
     public PeriodTest(String name)
     {
         super(name);
     }
 
     /**
-     * 
+     *
      */
     public void testGetStart() {
     	assertEquals(expectedDate, period.getStart());
     }
 
     /**
-     * 
+     *
      */
     public void testGetEnd() {
     	assertEquals(expectedDate, period.getEnd());
     }
 
     /**
-     * 
+     *
      */
     public void testGetEndTimeZone() {
         assertEquals(expectedTimezone, period.getEnd().getTimeZone());
     }
 
     /**
-     * 
+     *
      */
     public void testGetEndIsUtc() {
         assertEquals(expectedIsUtc, period.getEnd().isUtc());
@@ -161,9 +160,9 @@ public class PeriodTest extends TestCase {
     public void testIncludes()  {
     	assertTrue(period.includes(expectedDate));
     }
-    
+
     /**
-     * 
+     *
      */
     public void testNotIncludes() {
     	assertFalse(period.includes(expectedDate));
@@ -194,33 +193,33 @@ public class PeriodTest extends TestCase {
     */
 
     /**
-     * 
+     *
      */
     public void testBefore() {
     	assertTrue(period.before(expectedPeriod));
     }
 
     /**
-     * 
+     *
      */
     public void testNotBefore() {
     	assertFalse(period.before(expectedPeriod));
     }
 
     /**
-     * 
+     *
      */
     public void testAfter() {
     	assertTrue(period.after(expectedPeriod));
     }
 
     /**
-     * 
+     *
      */
     public void testNotAfter() {
     	assertFalse(period.after(expectedPeriod));
     }
-    
+
     /**
      * test date before range
      * test date after range
@@ -262,12 +261,12 @@ public class PeriodTest extends TestCase {
     }
 
     /**
-     * 
+     *
      */
     public void testNotIntersects() {
     	assertFalse(period.intersects(expectedPeriod));
     }
-    
+
     /**
      * test range before
      * test range after
@@ -318,12 +317,12 @@ public class PeriodTest extends TestCase {
     }
 
     /**
-     * 
+     *
      */
     public void testNotContains()  {
     	assertFalse(period.contains(expectedPeriod));
     }
-    
+
     /**
      * test range before
      * test range after
@@ -400,48 +399,54 @@ public class PeriodTest extends TestCase {
      * Testing of timezone functionality.
      */
     public void testTimezone() {
+        // change default tz to non-UTC timezone.
+        java.util.TimeZone originalTzDefault = java.util.TimeZone.getDefault();
+        java.util.TimeZone.setDefault(java.util.TimeZone.getTimeZone("Australia/Melbourne"));
+
         java.util.Calendar cal = java.util.Calendar.getInstance();
         DateTime start = new DateTime(cal.getTime());
         cal.add(Calendar.DAY_OF_YEAR, 1);
 //        cal.setTimeZone(TimeZone.getTimeZone(TimeZones.UTC_ID));
         DateTime end = new DateTime(cal.getTime());
         end.setUtc(true);
-        
+
         Period p = new Period(start, end);
-        
+
         LOG.info("Timezone test - period: [" + p + "]");
-        
+
         assertFalse(p.getStart().isUtc());
         // end utc flag should be automatically set to same as start..
         assertFalse(p.getEnd().isUtc());
-        
+
         start.setUtc(true);
         p = new Period(start, end);
-        
+
         LOG.info("Timezone test - period: [" + p + "]");
-        
+
         assertTrue(p.getStart().isUtc());
         assertTrue(p.getEnd().isUtc());
-        
+
         p.setUtc(false);
-        
+
         LOG.info("Timezone test - period: [" + p + "]");
-        
+
         assertFalse(p.getStart().isUtc());
         assertFalse(p.getEnd().isUtc());
-        
+
         TimeZoneRegistry registry = TimeZoneRegistryFactory.getInstance().createRegistry();
         TimeZone timezone = registry.getTimeZone("Australia/Melbourne");
-        
+
         p.setUtc(true);
         p.setTimeZone(timezone);
-        
+
         assertFalse(p.getStart().isUtc());
         assertFalse(p.getEnd().isUtc());
         assertEquals(timezone, p.getStart().getTimeZone());
         assertEquals(timezone, p.getEnd().getTimeZone());
+
+        java.util.TimeZone.setDefault(originalTzDefault);
     }
-    
+
     /**
      * Unit tests for {@link Period#isEmpty()}.
      */
@@ -450,15 +455,15 @@ public class PeriodTest extends TestCase {
         DateTime start = new DateTime(cal.getTime());
         assertTrue(new Period(start, start).isEmpty());
         assertTrue(new Period(start, new Dur(0)).isEmpty());
-        
+
         cal.add(Calendar.SECOND, 1);
         assertFalse(new Period(start, new DateTime(cal.getTime())).isEmpty());
         assertFalse(new Period(start, new Dur(0, 0, 0, 1)).isEmpty());
     }
-    
+
     /**
      * @return
-     * @throws ParseException 
+     * @throws ParseException
      */
     public static Test suite() throws ParseException {
     	TestSuite suite = new TestSuite();
@@ -493,7 +498,7 @@ public class PeriodTest extends TestCase {
         Period marchToMay = new Period(mar1994, jun1994);
         Period marchToApril = new Period(mar1994, may1994);
 //        Period duplicateRange = new Period(begin1994, end1994);
-    	
+
         Period testPeriod;
 
         /*
@@ -545,7 +550,7 @@ public class PeriodTest extends TestCase {
         suite.addTest(new PeriodTest("testNotIncludes", year1994, future));
         suite.addTest(new PeriodTest("testIncludes", year1994, begin1994));
         suite.addTest(new PeriodTest("testIncludes", year1994, end1994));
-        
+
         suite.addTest(new PeriodTest("testBefore", monthMarch, monthMay));
         suite.addTest(new PeriodTest("testNotBefore", monthMay, monthMarch));
         suite.addTest(new PeriodTest("testNotBefore", winter, monthMarch));
@@ -556,7 +561,7 @@ public class PeriodTest extends TestCase {
         // before april..
         suite.addTest(new PeriodTest("testNotBefore", monthMarch, monthApril));
         suite.addTest(new PeriodTest("testNotBefore", monthApril, monthMarch));
-        
+
         suite.addTest(new PeriodTest("testNotAfter", monthMarch, monthMay));
         suite.addTest(new PeriodTest("testAfter", monthMay, monthMarch));
         suite.addTest(new PeriodTest("testNotAfter", winter, monthMarch));
@@ -567,7 +572,7 @@ public class PeriodTest extends TestCase {
         // because month march end is same as month april start, april is not
         // after march..
         suite.addTest(new PeriodTest("testNotAfter", monthApril, monthMarch));
-    	
+
         suite.addTest(new PeriodTest("testNotIntersects", monthMarch, monthMay));
         suite.addTest(new PeriodTest("testNotIntersects", monthMay, monthMarch));
         suite.addTest(new PeriodTest("testNotIntersects", monthMarch, monthApril));
@@ -576,7 +581,7 @@ public class PeriodTest extends TestCase {
         suite.addTest(new PeriodTest("testIntersects", lastHalf, firstHalf));
         suite.addTest(new PeriodTest("testIntersects", winter, monthMarch));
         suite.addTest(new PeriodTest("testIntersects", monthMarch, winter));
-    	
+
         suite.addTest(new PeriodTest("testNotContains", monthMarch, monthMay));
         suite.addTest(new PeriodTest("testNotContains", monthMay, monthMarch));
         suite.addTest(new PeriodTest("testNotContains", monthMarch, monthApril));
@@ -585,7 +590,7 @@ public class PeriodTest extends TestCase {
         suite.addTest(new PeriodTest("testNotContains", lastHalf, firstHalf));
         suite.addTest(new PeriodTest("testContains", winter, monthMarch));
         suite.addTest(new PeriodTest("testNotContains", monthMarch, winter));
-        
+
         suite.addTest(new PeriodTest("testEquals", monthMarch.add(monthMay), marchToMay));
         suite.addTest(new PeriodTest("testEquals", monthMay.add(monthMarch), marchToMay));
         suite.addTest(new PeriodTest("testEquals", monthMarch.add(monthApril), marchToApril));
@@ -594,34 +599,34 @@ public class PeriodTest extends TestCase {
         suite.addTest(new PeriodTest("testEquals", lastHalf.add(firstHalf), year1994));
         suite.addTest(new PeriodTest("testEquals", winter.add(monthMarch), winter));
         suite.addTest(new PeriodTest("testEquals",  monthMarch.add(winter), winter));
-        
+
         // test period contained by subtraction..
         suite.addTest(new PeriodListTest("testIsEmpty", firstHalf.subtract(year1994)));
         suite.addTest(new PeriodListTest("testIsEmpty", winter.subtract(winter)));
-        
+
         // test non-intersecting periods..
         suite.addTest(new PeriodListTest("testContains", winter.subtract(spring), winter));
         suite.addTest(new PeriodListTest(winter.subtract(spring), 1));
-        
+
         // test intersecting periods..
         PeriodList aprToMay = marchToMay.subtract(marchToApril);
         suite.addTest(new PeriodListTest(aprToMay, 1));
-        
+
         // test subtraction contained by period..
         suite.addTest(new PeriodListTest(year1994.subtract(monthApril), 2));
-        
+
         TimeZoneRegistry registry = TimeZoneRegistryFactory.getInstance().createRegistry();
         DateTime start = new DateTime("20081115T163800", registry.getTimeZone("Australia/Melbourne"));
         suite.addTest(new PeriodTest("testGetEndTimeZone", new Period(start, new Dur(1)), registry.getTimeZone("Australia/Melbourne")));
-        
+
         start = new DateTime(start);
         start.setUtc(true);
         suite.addTest(new PeriodTest("testGetEndIsUtc", new Period(start, new Dur(1)), true));
-        
+
         // other tests..
         suite.addTest(new PeriodTest("testTimezone"));
         suite.addTest(new PeriodTest("testEquals"));
-        
+
         return suite;
     }
 }
