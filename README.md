@@ -1,4 +1,4 @@
-## bw-ical4j-cl
+## bw-ical4j-cl [![Build Status](https://travis-ci.org/Bedework/bw-ical4j-cl.svg)](https://travis-ci.org/Bedework/bw-ical4j-cl)
 
 This project is a fork of [ical4j](https://github.com/ical4j/ical4j) that has been modified to suit specific needs of [Bedework](https://www.apereo.org/projects/bedework).
 
